@@ -10,7 +10,7 @@ namespace Library.Common.Entities
         public string Name { get; set;  } = null!;
         public Genre Genre { get; set; }
         public int Count { get; set; }
-        public int PublisherTypeId { get; set; }
+        public Guid PublisherTypeId { get; set; }
         public PublisherCodeType PublisherType { get; set; } = null!;
         public ICollection<Author> Authors { get; set; } = new List<Author>();
         public DateTime PublishYear { get; set; }

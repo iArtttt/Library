@@ -17,8 +17,7 @@ namespace Library.DAL.Migrations
                 name: "Authors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SecondName = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -32,8 +31,7 @@ namespace Library.DAL.Migrations
                 name: "PublishingCodeTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PublisherCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -45,11 +43,16 @@ namespace Library.DAL.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Login = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    DocumentNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DocumentType = table.Column<int>(type: "int", nullable: true),
+                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -60,12 +63,11 @@ namespace Library.DAL.Migrations
                 name: "Books",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Genre = table.Column<int>(type: "int", nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false),
-                    PublisherTypeId = table.Column<int>(type: "int", nullable: false),
+                    PublisherTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PublishYear = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -83,50 +85,11 @@ namespace Library.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Librarians",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Librarians", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Librarians_Users_Id",
-                        column: x => x.Id,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Readers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DocumentNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DocumentType = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Readers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Readers_Users_Id",
-                        column: x => x.Id,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AuthorBook",
                 columns: table => new
                 {
-                    AuthorsId = table.Column<int>(type: "int", nullable: false),
-                    BooksId = table.Column<int>(type: "int", nullable: false)
+                    AuthorsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BooksId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -149,15 +112,13 @@ namespace Library.DAL.Migrations
                 name: "BorrowedBooks",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    ReaderId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReaderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Taken = table.Column<DateTime>(type: "datetime2", nullable: false),
                     WhenReturned = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ToReturn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsReturned = table.Column<bool>(type: "bit", nullable: false),
-                    LibrarianId = table.Column<int>(type: "int", nullable: true)
+                    IsReturned = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -169,14 +130,9 @@ namespace Library.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BorrowedBooks_Librarians_LibrarianId",
-                        column: x => x.LibrarianId,
-                        principalTable: "Librarians",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_BorrowedBooks_Readers_ReaderId",
+                        name: "FK_BorrowedBooks_Users_ReaderId",
                         column: x => x.ReaderId,
-                        principalTable: "Readers",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -186,9 +142,9 @@ namespace Library.DAL.Migrations
                 columns: new[] { "Id", "LastName", "Name", "SecondName" },
                 values: new object[,]
                 {
-                    { 1, "Fiom", "Oleg", null },
-                    { 2, "Syropin", "Ivan", "Grozniy" },
-                    { 3, "Syropin", "Vasiliy", "Krot" }
+                    { new Guid("10ce119e-0cf5-478f-a016-964530f3c330"), "Fiom", "Oleg", null },
+                    { new Guid("1f2f09f8-5326-4f16-81a2-81705a3406ea"), "Syropin", "Ivan", "Grozniy" },
+                    { new Guid("a36ded85-bf17-4815-adf1-ca2f07b81930"), "Syropin", "Vasiliy", "Krot" }
                 });
 
             migrationBuilder.InsertData(
@@ -196,21 +152,21 @@ namespace Library.DAL.Migrations
                 columns: new[] { "Id", "PublisherCode" },
                 values: new object[,]
                 {
-                    { 1, "ISBN" },
-                    { 2, "ISSN" },
-                    { 3, "ISRC" },
-                    { 4, "ISWC" }
+                    { new Guid("19ccc910-4fcf-413e-85ec-ae8803f8788d"), "ISRC" },
+                    { new Guid("4f881976-6c99-469e-ab6d-8bb9ade69d15"), "ISBN" },
+                    { new Guid("8590aa52-7cbe-4d1c-9b10-ed4f8637957e"), "ISWC" },
+                    { new Guid("e93a6306-87c8-43f1-9b98-018e4428561c"), "ISSN" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Email", "Login", "Password" },
+                columns: new[] { "Id", "Birthday", "DocumentNumber", "DocumentType", "Email", "LastName", "Login", "Name", "Password", "Role" },
                 values: new object[,]
                 {
-                    { -4, "rEAr@gmail.com", "Reader1", "1423" },
-                    { -3, "reader@gmail.com", "Reader", "1234" },
-                    { -2, "admin1@gmail.com", "Admin1", "4567" },
-                    { -1, "admin@gmail.com", "Admin", "1234" }
+                    { new Guid("010a3fc9-d742-41d3-becd-f4f2669fc2c3"), null, null, null, "admin@gmail.com", "Svichkar", "Admin", "Artur", "1234", 2 },
+                    { new Guid("575bad15-19aa-4616-90d7-718006dce32c"), null, null, null, "admin1@gmail.com", "Sunches", "Admin1", "Rick", "4567", 2 },
+                    { new Guid("670ec28c-274b-4009-8f5d-637206220341"), new DateTime(1993, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), "777789", 0, "rEAr@gmail.com", "Zeroph", "Reader1", "Alex", "1423", 1 },
+                    { new Guid("7d74a99a-bd3d-42e7-a461-9cc65bc26626"), new DateTime(2026, 7, 28, 0, 0, 0, 0, DateTimeKind.Local), "3354213", 1, "reader@gmail.com", "Lighter", "Reader", "Bob", "1234", 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -218,28 +174,10 @@ namespace Library.DAL.Migrations
                 columns: new[] { "Id", "City", "Count", "Country", "Genre", "Name", "PublishYear", "PublisherTypeId", "ReturnedDays" },
                 values: new object[,]
                 {
-                    { 1, "Kharkiv", 2, "Ukrain", 1024, "C# for smart", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 30 },
-                    { 2, "Kiev", 1, "Ukrain", 16, "World Story", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 30 },
-                    { 3, "Kiev", 5, "Ukrain", 32, "Summer Time", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 30 },
-                    { 4, null, 2, "Poland", 2, "Mgla", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 30 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Librarians",
-                column: "Id",
-                values: new object[]
-                {
-                    -2,
-                    -1
-                });
-
-            migrationBuilder.InsertData(
-                table: "Readers",
-                columns: new[] { "Id", "Birthday", "DocumentNumber", "DocumentType", "LastName", "Name" },
-                values: new object[,]
-                {
-                    { -4, new DateTime(1993, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), "777789", 0, "Zeroph", "Alex" },
-                    { -3, new DateTime(2026, 7, 28, 0, 0, 0, 0, DateTimeKind.Local), "3354213", 1, "Lighter", "Bob" }
+                    { new Guid("5ebc58c4-2618-4348-b3ea-bf9bbc5f3a03"), "Kiev", 5, "Ukrain", 32, "Summer Time", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("19ccc910-4fcf-413e-85ec-ae8803f8788d"), 30 },
+                    { new Guid("ac61b44e-c484-4566-bfc0-13f6804b9c59"), null, 2, "Poland", 2, "Mgla", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("4f881976-6c99-469e-ab6d-8bb9ade69d15"), 30 },
+                    { new Guid("eb886598-4b81-4e2f-b11c-ba4b32fa5ed0"), "Kiev", 1, "Ukrain", 16, "World Story", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("e93a6306-87c8-43f1-9b98-018e4428561c"), 30 },
+                    { new Guid("f527f881-937f-42bf-89b1-02df6c19e8cd"), "Kharkiv", 2, "Ukrain", 1024, "C# for smart", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("4f881976-6c99-469e-ab6d-8bb9ade69d15"), 30 }
                 });
 
             migrationBuilder.InsertData(
@@ -247,11 +185,11 @@ namespace Library.DAL.Migrations
                 columns: new[] { "AuthorsId", "BooksId" },
                 values: new object[,]
                 {
-                    { 1, 1 },
-                    { 1, 2 },
-                    { 2, 2 },
-                    { 3, 3 },
-                    { 3, 4 }
+                    { new Guid("10ce119e-0cf5-478f-a016-964530f3c330"), new Guid("eb886598-4b81-4e2f-b11c-ba4b32fa5ed0") },
+                    { new Guid("10ce119e-0cf5-478f-a016-964530f3c330"), new Guid("f527f881-937f-42bf-89b1-02df6c19e8cd") },
+                    { new Guid("1f2f09f8-5326-4f16-81a2-81705a3406ea"), new Guid("eb886598-4b81-4e2f-b11c-ba4b32fa5ed0") },
+                    { new Guid("a36ded85-bf17-4815-adf1-ca2f07b81930"), new Guid("5ebc58c4-2618-4348-b3ea-bf9bbc5f3a03") },
+                    { new Guid("a36ded85-bf17-4815-adf1-ca2f07b81930"), new Guid("ac61b44e-c484-4566-bfc0-13f6804b9c59") }
                 });
 
             migrationBuilder.CreateIndex(
@@ -268,11 +206,6 @@ namespace Library.DAL.Migrations
                 name: "IX_BorrowedBooks_BookId",
                 table: "BorrowedBooks",
                 column: "BookId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BorrowedBooks_LibrarianId",
-                table: "BorrowedBooks",
-                column: "LibrarianId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BorrowedBooks_ReaderId",
@@ -302,16 +235,10 @@ namespace Library.DAL.Migrations
                 name: "Books");
 
             migrationBuilder.DropTable(
-                name: "Librarians");
-
-            migrationBuilder.DropTable(
-                name: "Readers");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "PublishingCodeTypes");
-
-            migrationBuilder.DropTable(
-                name: "Users");
         }
     }
 }

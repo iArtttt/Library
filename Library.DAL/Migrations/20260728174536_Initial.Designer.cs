@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library.DAL.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20260728080759_Initial")]
+    [Migration("20260728174536_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -27,11 +27,11 @@ namespace Library.DAL.Migrations
 
             modelBuilder.Entity("AuthorBook", b =>
                 {
-                    b.Property<int>("AuthorsId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AuthorsId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("BooksId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BooksId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("AuthorsId", "BooksId");
 
@@ -42,69 +42,36 @@ namespace Library.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            AuthorsId = 1,
-                            BooksId = 1
+                            AuthorsId = new Guid("10ce119e-0cf5-478f-a016-964530f3c330"),
+                            BooksId = new Guid("f527f881-937f-42bf-89b1-02df6c19e8cd")
                         },
                         new
                         {
-                            AuthorsId = 1,
-                            BooksId = 2
+                            AuthorsId = new Guid("10ce119e-0cf5-478f-a016-964530f3c330"),
+                            BooksId = new Guid("eb886598-4b81-4e2f-b11c-ba4b32fa5ed0")
                         },
                         new
                         {
-                            AuthorsId = 2,
-                            BooksId = 2
+                            AuthorsId = new Guid("1f2f09f8-5326-4f16-81a2-81705a3406ea"),
+                            BooksId = new Guid("eb886598-4b81-4e2f-b11c-ba4b32fa5ed0")
                         },
                         new
                         {
-                            AuthorsId = 3,
-                            BooksId = 3
+                            AuthorsId = new Guid("a36ded85-bf17-4815-adf1-ca2f07b81930"),
+                            BooksId = new Guid("5ebc58c4-2618-4348-b3ea-bf9bbc5f3a03")
                         },
                         new
                         {
-                            AuthorsId = 3,
-                            BooksId = 4
+                            AuthorsId = new Guid("a36ded85-bf17-4815-adf1-ca2f07b81930"),
+                            BooksId = new Guid("ac61b44e-c484-4566-bfc0-13f6804b9c59")
                         });
                 });
 
-            modelBuilder.Entity("Library.Common.Abstractions.User", b =>
+            modelBuilder.Entity("Library.Common.Entities.Author", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Login")
-                        .IsUnique();
-
-                    b.ToTable("Users");
-
-                    b.UseTptMappingStrategy();
-                });
-
-            modelBuilder.Entity("Library.DAL.Models.Author", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -124,33 +91,31 @@ namespace Library.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("10ce119e-0cf5-478f-a016-964530f3c330"),
                             LastName = "Fiom",
                             Name = "Oleg"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = new Guid("1f2f09f8-5326-4f16-81a2-81705a3406ea"),
                             LastName = "Syropin",
                             Name = "Ivan",
                             SecondName = "Grozniy"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = new Guid("a36ded85-bf17-4815-adf1-ca2f07b81930"),
                             LastName = "Syropin",
                             Name = "Vasiliy",
                             SecondName = "Krot"
                         });
                 });
 
-            modelBuilder.Entity("Library.DAL.Models.Book", b =>
+            modelBuilder.Entity("Library.Common.Entities.Book", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
@@ -171,8 +136,8 @@ namespace Library.DAL.Migrations
                     b.Property<DateTime>("PublishYear")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PublisherTypeId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PublisherTypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ReturnedDays")
                         .HasColumnType("int");
@@ -186,72 +151,67 @@ namespace Library.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("f527f881-937f-42bf-89b1-02df6c19e8cd"),
                             City = "Kharkiv",
                             Count = 2,
                             Country = "Ukrain",
                             Genre = 1024,
                             Name = "C# for smart",
                             PublishYear = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PublisherTypeId = 1,
+                            PublisherTypeId = new Guid("4f881976-6c99-469e-ab6d-8bb9ade69d15"),
                             ReturnedDays = 30
                         },
                         new
                         {
-                            Id = 2,
+                            Id = new Guid("eb886598-4b81-4e2f-b11c-ba4b32fa5ed0"),
                             City = "Kiev",
                             Count = 1,
                             Country = "Ukrain",
                             Genre = 16,
                             Name = "World Story",
                             PublishYear = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PublisherTypeId = 2,
+                            PublisherTypeId = new Guid("e93a6306-87c8-43f1-9b98-018e4428561c"),
                             ReturnedDays = 30
                         },
                         new
                         {
-                            Id = 3,
+                            Id = new Guid("5ebc58c4-2618-4348-b3ea-bf9bbc5f3a03"),
                             City = "Kiev",
                             Count = 5,
                             Country = "Ukrain",
                             Genre = 32,
                             Name = "Summer Time",
                             PublishYear = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PublisherTypeId = 3,
+                            PublisherTypeId = new Guid("19ccc910-4fcf-413e-85ec-ae8803f8788d"),
                             ReturnedDays = 30
                         },
                         new
                         {
-                            Id = 4,
+                            Id = new Guid("ac61b44e-c484-4566-bfc0-13f6804b9c59"),
                             Count = 2,
                             Country = "Poland",
                             Genre = 2,
                             Name = "Mgla",
                             PublishYear = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PublisherTypeId = 1,
+                            PublisherTypeId = new Guid("4f881976-6c99-469e-ab6d-8bb9ade69d15"),
                             ReturnedDays = 30
                         });
                 });
 
-            modelBuilder.Entity("Library.DAL.Models.BorrowedBook", b =>
+            modelBuilder.Entity("Library.Common.Entities.BorrowedBook", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsReturned")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("LibrarianId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReaderId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ReaderId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Taken")
                         .HasColumnType("datetime2");
@@ -266,20 +226,16 @@ namespace Library.DAL.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("LibrarianId");
-
                     b.HasIndex("ReaderId");
 
                     b.ToTable("BorrowedBooks");
                 });
 
-            modelBuilder.Entity("Library.DAL.Models.PublisherCodeType", b =>
+            modelBuilder.Entity("Library.Common.Entities.PublisherCodeType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PublisherCode")
                         .IsRequired()
@@ -292,118 +248,139 @@ namespace Library.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("4f881976-6c99-469e-ab6d-8bb9ade69d15"),
                             PublisherCode = "ISBN"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = new Guid("e93a6306-87c8-43f1-9b98-018e4428561c"),
                             PublisherCode = "ISSN"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = new Guid("19ccc910-4fcf-413e-85ec-ae8803f8788d"),
                             PublisherCode = "ISRC"
                         },
                         new
                         {
-                            Id = 4,
+                            Id = new Guid("8590aa52-7cbe-4d1c-9b10-ed4f8637957e"),
                             PublisherCode = "ISWC"
                         });
                 });
 
-            modelBuilder.Entity("Library.DAL.Models.Librarian", b =>
+            modelBuilder.Entity("Library.Common.Entities.User", b =>
                 {
-                    b.HasBaseType("Library.Common.Abstractions.User");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.ToTable("Librarians", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = -1,
-                            Email = "admin@gmail.com",
-                            Login = "Admin",
-                            Password = "1234"
-                        },
-                        new
-                        {
-                            Id = -2,
-                            Email = "admin1@gmail.com",
-                            Login = "Admin1",
-                            Password = "4567"
-                        });
-                });
-
-            modelBuilder.Entity("Library.DAL.Models.Reader", b =>
-                {
-                    b.HasBaseType("Library.Common.Abstractions.User");
-
-                    b.Property<DateTime>("Birthday")
+                    b.Property<DateTime?>("Birthday")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DocumentNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DocumentType")
+                    b.Property<int?>("DocumentType")
                         .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Readers", (string)null);
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Login")
+                        .IsUnique();
+
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
-                            Id = -3,
-                            Email = "reader@gmail.com",
-                            Login = "Reader",
+                            Id = new Guid("010a3fc9-d742-41d3-becd-f4f2669fc2c3"),
+                            Email = "admin@gmail.com",
+                            LastName = "Svichkar",
+                            Login = "Admin",
+                            Name = "Artur",
                             Password = "1234",
-                            Birthday = new DateTime(2026, 7, 28, 0, 0, 0, 0, DateTimeKind.Local),
-                            DocumentNumber = "3354213",
-                            DocumentType = 1,
-                            LastName = "Lighter",
-                            Name = "Bob"
+                            Role = 2
                         },
                         new
                         {
-                            Id = -4,
-                            Email = "rEAr@gmail.com",
-                            Login = "Reader1",
-                            Password = "1423",
+                            Id = new Guid("575bad15-19aa-4616-90d7-718006dce32c"),
+                            Email = "admin1@gmail.com",
+                            LastName = "Sunches",
+                            Login = "Admin1",
+                            Name = "Rick",
+                            Password = "4567",
+                            Role = 2
+                        },
+                        new
+                        {
+                            Id = new Guid("7d74a99a-bd3d-42e7-a461-9cc65bc26626"),
+                            Birthday = new DateTime(2026, 7, 28, 0, 0, 0, 0, DateTimeKind.Local),
+                            DocumentNumber = "3354213",
+                            DocumentType = 1,
+                            Email = "reader@gmail.com",
+                            LastName = "Lighter",
+                            Login = "Reader",
+                            Name = "Bob",
+                            Password = "1234",
+                            Role = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("670ec28c-274b-4009-8f5d-637206220341"),
                             Birthday = new DateTime(1993, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DocumentNumber = "777789",
                             DocumentType = 0,
+                            Email = "rEAr@gmail.com",
                             LastName = "Zeroph",
-                            Name = "Alex"
+                            Login = "Reader1",
+                            Name = "Alex",
+                            Password = "1423",
+                            Role = 1
                         });
                 });
 
             modelBuilder.Entity("AuthorBook", b =>
                 {
-                    b.HasOne("Library.DAL.Models.Author", null)
+                    b.HasOne("Library.Common.Entities.Author", null)
                         .WithMany()
                         .HasForeignKey("AuthorsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Library.DAL.Models.Book", null)
+                    b.HasOne("Library.Common.Entities.Book", null)
                         .WithMany()
                         .HasForeignKey("BooksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Library.DAL.Models.Book", b =>
+            modelBuilder.Entity("Library.Common.Entities.Book", b =>
                 {
-                    b.HasOne("Library.DAL.Models.PublisherCodeType", "PublisherType")
+                    b.HasOne("Library.Common.Entities.PublisherCodeType", "PublisherType")
                         .WithMany()
                         .HasForeignKey("PublisherTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -412,19 +389,15 @@ namespace Library.DAL.Migrations
                     b.Navigation("PublisherType");
                 });
 
-            modelBuilder.Entity("Library.DAL.Models.BorrowedBook", b =>
+            modelBuilder.Entity("Library.Common.Entities.BorrowedBook", b =>
                 {
-                    b.HasOne("Library.DAL.Models.Book", "Book")
+                    b.HasOne("Library.Common.Entities.Book", "Book")
                         .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Library.DAL.Models.Librarian", null)
-                        .WithMany("ManagedBorrows")
-                        .HasForeignKey("LibrarianId");
-
-                    b.HasOne("Library.DAL.Models.Reader", "Reader")
+                    b.HasOne("Library.Common.Entities.User", "Reader")
                         .WithMany()
                         .HasForeignKey("ReaderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -433,29 +406,6 @@ namespace Library.DAL.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("Reader");
-                });
-
-            modelBuilder.Entity("Library.DAL.Models.Librarian", b =>
-                {
-                    b.HasOne("Library.Common.Abstractions.User", null)
-                        .WithOne()
-                        .HasForeignKey("Library.DAL.Models.Librarian", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Library.DAL.Models.Reader", b =>
-                {
-                    b.HasOne("Library.Common.Abstractions.User", null)
-                        .WithOne()
-                        .HasForeignKey("Library.DAL.Models.Reader", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Library.DAL.Models.Librarian", b =>
-                {
-                    b.Navigation("ManagedBorrows");
                 });
 #pragma warning restore 612, 618
         }

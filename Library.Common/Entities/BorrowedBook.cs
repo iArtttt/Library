@@ -6,13 +6,13 @@ namespace Library.Common.Entities
     {
         public Guid Id { get; set; }
 
-        public int BookId { get; set; }
+        public Guid BookId { get; set; }
         
         public Book Book { get; set; } = null!;
 
-        public int ReaderId { get; set; }
+        public Guid ReaderId { get; set; }
 
-        public Reader Reader { get; set; } = null!;
+        public User Reader { get; set; } = null!;
 
         public DateTime Taken { get; set; } = DateTime.UtcNow;
 

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Library.Common.Entities
 {
-    public abstract class User : IUser, IPerson
+    public class User : IUser, IPerson
     {
         public Guid Id {  get; set; }
 
