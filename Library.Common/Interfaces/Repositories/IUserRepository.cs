@@ -8,7 +8,7 @@ namespace Library.Common.Interfaces.Repositories
         Task<List<User>> FindUserAsync(string? toSearch);
         Task<User?> GetByIdAsync(Guid id);
 
-        Task AddAsync(UserRegisterDto user);
+        Task AddAsync(User user);
         Task DeleteAsync(Guid id);
         Task UpdateAsync(User user);
     }

@@ -1,6 +1,8 @@
 ﻿using Library.Common.Entities;
 using Library.Common.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Library.DAL
 {
@@ -42,13 +44,31 @@ namespace Library.DAL
                 .HasIndex(u => u.Login)
                 .IsUnique();
 
+            string adminSalt = "A1B2C3D4E5F67890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890";
+            string readerSalt = "F9E8D7C6B5A43210FEDCBA0987654321FEDCBA0987654321FEDCBA0987654321";
+
+            string GetSeedHash(string password, string salt)
+            {
+                using var sha256 = SHA256.Create();
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password + salt));
+                return Convert.ToHexString(bytes);
+            }
+
+            string adminHash = GetSeedHash("admin123", adminSalt);
+            string admin1Hash = GetSeedHash("1234", adminSalt);
+            string readerHash = GetSeedHash("reader123", readerSalt);
+            string reader1Hash = GetSeedHash("4321", readerSalt);
+
+
+
             modelBuilder.Entity<User>()
                 .HasData(
                 new User() 
                 { 
                     Id = Guid.Parse("010A3FC9-D742-41D3-BECD-F4F2669FC2C3"), 
                     Login = "Admin", 
-                    Password = "1234", 
+                    PasswordHash = adminHash,
+                    PasswordSalt = adminSalt,
                     Email = "admin@gmail.com",
                     Name = "Artur",
                     LastName = "Svichkar",
@@ -58,7 +78,8 @@ namespace Library.DAL
                 { 
                     Id = Guid.Parse("575BAD15-19AA-4616-90D7-718006DCE32C"), 
                     Login = "Admin1", 
-                    Password = "4567", 
+                    PasswordHash = admin1Hash,
+                    PasswordSalt = adminSalt,
                     Email = "admin1@gmail.com",
                     Name = "Rick",
                     LastName = "Sunches",
@@ -68,7 +89,8 @@ namespace Library.DAL
                 {
                     Id = Guid.Parse("7D74A99A-BD3D-42E7-A461-9CC65BC26626"),
                     Login = "Reader",
-                    Password = "1234",
+                    PasswordHash = readerHash,
+                    PasswordSalt = readerSalt,
                     Email = "reader@gmail.com",
                     Name = "Bob",
                     LastName = "Lighter",
@@ -81,7 +103,8 @@ namespace Library.DAL
                 {
                    Id = Guid.Parse("670EC28C-274B-4009-8F5D-637206220341"),
                     Login = "Reader1",
-                    Password = "1423",
+                    PasswordHash = reader1Hash,
+                    PasswordSalt = readerSalt,
                     Email = "rEAr@gmail.com",
                     Name = "Alex",
                     LastName = "Zeroph",

@@ -13,7 +13,8 @@ namespace Library.Common.Entities
         public string Login { get; set; } = null!;
         [Required]
         [StringLength(100)]
-        public string Password { get; set; } = null!;
+        public string PasswordHash { get; set; } = null!;
+        public string PasswordSalt { get; set; } = null!;
         public string? Email { get; set; }
         public string Name { get; set; } = null!;
         public string LastName { get; set; } = null!;

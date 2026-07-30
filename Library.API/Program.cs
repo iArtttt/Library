@@ -1,7 +1,9 @@
 
 using Library.Common.Interfaces.Repositories;
+using Library.Common.Interfaces.Services;
 using Library.DAL;
 using Library.DAL.Repositories;
+using Library.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.API
@@ -28,6 +30,7 @@ namespace Library.API
 
             builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 
