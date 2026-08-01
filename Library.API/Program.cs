@@ -31,7 +31,9 @@ namespace Library.API
             builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
-
+            
+            builder.Services.AddScoped<IBorrowedBookRepository, BorrowedBookRepository>();
+            builder.Services.AddScoped<IBorrowService, BorrowService>();
 
 
             var app = builder.Build();

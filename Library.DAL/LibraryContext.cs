@@ -101,7 +101,7 @@ namespace Library.DAL
                 },
                 new User()
                 {
-                   Id = Guid.Parse("670EC28C-274B-4009-8F5D-637206220341"),
+                    Id = Guid.Parse("670EC28C-274B-4009-8F5D-637206220341"),
                     Login = "Reader1",
                     PasswordHash = reader1Hash,
                     PasswordSalt = readerSalt,

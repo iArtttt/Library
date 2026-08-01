@@ -28,7 +28,6 @@ namespace Library.Infrastructure.Services
         {
             if (string.IsNullOrEmpty(password)) return string.Empty;
 
-            // Combining plain text password with the unique cryptographic salt string [1]
             string combinedInput = password + salt;
 
             using var sha256 = SHA256.Create();
